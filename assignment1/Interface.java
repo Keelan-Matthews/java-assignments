@@ -383,31 +383,215 @@ public class Interface {
 	}
 
 	public float findMaxValue() {
+		if (numNodes == 0) return Float.NaN;
 
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.right != null)
+			nodeV1 = nodeV1.right;
+
+		Node nodeV2 = nodeV1;
+
+		//Get nodeV2 to the top
+		while (nodeV2.up != null)
+			nodeV2 = nodeV2.up;
+
+		return nodeV2.getValue();
 	}
 
 	public Node findMax() {
 	}
 
 	public float findMinValue() {
+		if (numNodes == 0) return Float.NaN;
+
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
+
+		Node nodeV2 = nodeV1;
+
+		//Get nodeV2 to the bottom
+		while (nodeV2.down != null)
+			nodeV2 = nodeV2.down;
+
+		return nodeV2.getValue();
 	}
 
 	public Node findMin() {
 	}
 
 	public String printFunctionValues(String functionName) {
+		if (numNodes == 0) return "";
+
+		String output = "";
+
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
+
+		Node nodeV2 = null;
+
+		while (nodeV1.right != null) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					//If function is the head
+					if (nodeV2.getFunction().getFunctionName().compareTo(functionName) == 0) {
+						if (nodeV2.prevVal == null) {
+							output = output + floatFormatter(nodeV2.getValue()) + ";";
+						} else {
+							Node sameNode = nodeV2;
+
+							while (sameNode.prevVal != null) {
+								if (sameNode.getFunction().getFunctionName().compareTo(functionName) == 0)
+									output = output + floatFormatter(sameNode.getValue()) + ";";
+								sameNode = sameNode.prevVal;
+							}
+						}
+					}
+					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							if (sameNode.getFunction().getFunctionName().compareTo(functionName) == 0)
+								output = output + floatFormatter(sameNode.getValue()) + ";";
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+
+
+		output = output.substring(0,output.length() - 1);
+		return output;
 	}
 
 	public int removeAllFunctionPoints(String functionName){
+		if (numNodes == 0) return 0;
+
+		int numRemoved = 0;
+
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
+
+		Node nodeV2 = null;
+
+		while (nodeV1.right != null) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					//If function is the head
+					if (nodeV2.getFunction().getFunctionName().compareTo(functionName) == 0) {
+						if (nodeV2.prevVal == null) {
+							numRemoved++;
+							numNodes--;
+
+							if (nodeV2.down != null)
+								nodeV2.down.up = nodeV2.up;
+
+							if (nodeV2.up != null)
+								nodeV2.up.down = nodeV2.down;
+
+							if (nodeV2.left != null)
+								nodeV2.left.right = nodeV2.right;
+
+							if (nodeV2.right != null)
+								nodeV2.right.left = nodeV2.left;
+						}
+						else {
+							numRemoved++;
+							numNodes--;
+							nodeV2.prevVal.left = nodeV2.left;
+							if (nodeV2.left != null)
+								nodeV2.left.right = nodeV2.prevVal;
+
+							nodeV2.prevVal.right = nodeV2.right;
+							if (nodeV2.right != null)
+								nodeV2.right.left = nodeV2.prevVal;
+
+							nodeV2.prevVal.up = nodeV2.up;
+							if (nodeV2.up != null)
+								nodeV2.up.down = nodeV2.prevVal;
+
+							nodeV2.prevVal.down = nodeV2.down;
+
+							if (nodeV2.down != null)
+								nodeV2.down.up = nodeV2.prevVal;
+						}
+					}
+					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							if (sameNode.getFunction().getFunctionName().compareTo(functionName) == 0) {
+								sameNode.prevVal.nextVal = sameNode.nextVal;
+								sameNode.nextVal.prevVal = sameNode.prevVal;
+								numRemoved++;
+								numNodes--;
+							}
+
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+		return numRemoved;
 	}
 
 	public int countNumberOfPoints(){
+		return numNodes;
 	}
 
 	public int[] numPointsPerQuadrant(){
+		int[] indexArray = new int[4];
+
+
+
+
+
+		return indexArray;
 	}
 
 	public void clearAllData(){
+		origin.right.left = null;
+		origin.right = null;
+		origin.left.right = null;
+		origin.left = null;
+		origin.up.down = null;
+		origin.up = null;
+		origin.down.up = null;
+		origin.down = null;
 	}
 
 	//ADD HELPER FUNCTIONS BELOW
