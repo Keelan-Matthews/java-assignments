@@ -11,6 +11,7 @@ public class Interface {
 
 	//DO NOT CHANGE THE ABOVE FUNCTION
 	//Place your code below
+	int numNodes = 0;
 
 	public Interface() {
 		Function originFunction = new Origin();
@@ -34,6 +35,7 @@ public class Interface {
 
 		Node newNode = new Node(function, v1, v2);
 		Node nodeV1 = origin;
+		numNodes++;
 
 		if (v1 > 0)
 			nodeV1 = moveRight(nodeV1, v1);
@@ -127,6 +129,7 @@ public class Interface {
 		if (v1 == 0 || v2 == 0) return null;
 
 		Node nodeV1 = origin;
+		numNodes--;
 
 		Node deleteNode = null;
 		if (v1 > 0) {
@@ -330,7 +333,48 @@ public class Interface {
 	}
 
 	public Node[] toArray() {
+		if (numNodes == 0) return null;
 
+		Node[] array = new Node[numNodes-1];
+		int i = 0;
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.right != null)
+			nodeV1 = nodeV1.right;
+
+		Node nodeV2 = null;
+
+		while (nodeV1.left != null) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the top
+			while (nodeV2.up != null)
+				nodeV2 = nodeV2.up;
+
+			//Traverse down y axis
+			while (nodeV2.down != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					if (nodeV2.prevVal == null) {
+						array[i++] = nodeV2;
+					}
+					else {
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							array[i++] = nodeV2;
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.down;
+			}
+
+			nodeV1 = nodeV1.left;
+		}
+
+		return array;
 	}
 
 	public float calculateValue(Function function, int v1, int v2) {
@@ -339,6 +383,7 @@ public class Interface {
 	}
 
 	public float findMaxValue() {
+
 	}
 
 	public Node findMax() {
