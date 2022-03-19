@@ -136,25 +136,6 @@ public class Interface {
 			if (nodeV1.right == null) return null;
 
 			deleteNode = nodeV1.right;
-
-			if (deleteNode.prevVal != null) {
-				deleteNode.left.right = deleteNode.prevVal;
-				deleteNode.prevVal.left = deleteNode.left;
-
-				if (deleteNode.right != null) {
-					deleteNode.right.left = deleteNode.prevVal;
-					deleteNode.prevVal.right = deleteNode.right;
-				}
-				else
-					deleteNode.prevVal.nextVal = null;
-			}
-			else {
-				//Unlink horizontally
-				deleteNode.left.right = deleteNode.right;
-
-				if (deleteNode.right != null)
-					deleteNode.right.left = deleteNode.left;
-			}
 		}
 		else {
 			while (nodeV1.left != null && nodeV1.left.getVariables()[0] != v1)
@@ -163,28 +144,16 @@ public class Interface {
 			if (nodeV1.left == null) return null;
 
 			deleteNode = nodeV1.left;
-
-			if (deleteNode.prevVal != null) {
-				deleteNode.right.left = deleteNode.prevVal;
-				deleteNode.prevVal.right = deleteNode.right;
-
-				if (deleteNode.left != null) {
-					deleteNode.left.right = deleteNode.prevVal;
-					deleteNode.prevVal.left = deleteNode.left;
-				}
-				else
-					deleteNode.prevVal.nextVal = null;
-			}
-			else {
-				//Unlink horizontally
-				deleteNode.right.left = deleteNode.left;
-
-				if (deleteNode.left != null)
-					deleteNode.left.right = deleteNode.right;
-			}
 		}
 
 		if (v2 > 0) {
+			while (deleteNode.up != null && deleteNode.up.getVariables()[1] != v2)
+				deleteNode = deleteNode.up;
+
+			if (deleteNode.up == null) return null;
+
+			deleteNode = deleteNode.up;
+
 			if (deleteNode.prevVal != null) {
 				deleteNode.down.up = deleteNode.prevVal;
 				deleteNode.prevVal.down = deleteNode.down;
@@ -205,6 +174,13 @@ public class Interface {
 			}
 		}
 		else {
+			while (deleteNode.down != null && deleteNode.down.getVariables()[1] != v2)
+				deleteNode = deleteNode.down;
+
+			if (deleteNode.down == null) return null;
+
+			deleteNode = deleteNode.down;
+
 			if (deleteNode.prevVal != null) {
 				deleteNode.up.down = deleteNode.prevVal;
 				deleteNode.prevVal.up = deleteNode.up;
@@ -224,8 +200,86 @@ public class Interface {
 			}
 		}
 
-		//See if axis node is still useful
+		//Unlink horizontally
+		if (v1 > 0) {
+			if (deleteNode.prevVal != null) {
+				deleteNode.left.right = deleteNode.prevVal;
+				deleteNode.prevVal.left = deleteNode.left;
 
+				if (deleteNode.right != null) {
+					deleteNode.right.left = deleteNode.prevVal;
+					deleteNode.prevVal.right = deleteNode.right;
+				}
+				else
+					deleteNode.prevVal.nextVal = null;
+			}
+			else {
+				deleteNode.left.right = deleteNode.right;
+
+				if (deleteNode.right != null)
+					deleteNode.right.left = deleteNode.left;
+			}
+
+			//See if axis is still necessary
+			Node nodeV1Check = origin;
+			while (nodeV1Check.getVariables()[0] != v1)
+				nodeV1Check = nodeV1Check.right;
+
+			if (nodeV1Check.up == null && nodeV1Check.down == null) {
+				nodeV1Check.left.right = nodeV1Check.right;
+				nodeV1Check.right.left = nodeV1Check.left;
+			}
+		}else {
+			if (deleteNode.prevVal != null) {
+				deleteNode.right.left = deleteNode.prevVal;
+				deleteNode.prevVal.right = deleteNode.right;
+
+				if (deleteNode.left != null) {
+					deleteNode.left.right = deleteNode.prevVal;
+					deleteNode.prevVal.left = deleteNode.left;
+				}
+				else
+					deleteNode.prevVal.nextVal = null;
+			}
+			else {
+				deleteNode.right.left = deleteNode.left;
+
+				if (deleteNode.left != null)
+					deleteNode.left.right = deleteNode.right;
+			}
+
+			//See if axis is still necessary
+			Node nodeV1Check = origin;
+			while (nodeV1Check.getVariables()[0] != v1)
+				nodeV1Check = nodeV1Check.left;
+
+			if (nodeV1Check.up == null && nodeV1Check.down == null) {
+				nodeV1Check.right.left = nodeV1Check.left;
+				nodeV1Check.left.right = nodeV1Check.right;
+			}
+		}
+
+		//See if y axis node is still useful
+		if (v2 > 0) {
+			Node nodeV2Check = origin;
+			while (nodeV2Check.getVariables()[1] != v2)
+				nodeV2Check = nodeV2Check.up;
+
+			if (nodeV2Check.right == null && nodeV2Check.left == null) {
+				nodeV2Check.up.down = nodeV2Check.down;
+				nodeV2Check.down.up = nodeV2Check.up;
+			}
+		}
+		else {
+			Node nodeV2Check = origin;
+			while (nodeV2Check.getVariables()[1] != v2)
+				nodeV2Check = nodeV2Check.down;
+
+			if (nodeV2Check.right == null && nodeV2Check.left == null) {
+				nodeV2Check.up.down = nodeV2Check.down;
+				nodeV2Check.down.up = nodeV2Check.up;
+			}
+		}
 
 		deleteNode.up = deleteNode.down = deleteNode.left = deleteNode.right = deleteNode.prevVal = null;
 		return deleteNode;
@@ -234,10 +288,49 @@ public class Interface {
 	public Node getPoint(int v1, int v2) {
 		if (v1 == 0 || v2 == 0) return null;
 
+		Node nodeV1 = origin;
+		Node searchNode = null;
+		if (v1 > 0) {
+			while (nodeV1.right != null && nodeV1.right.getVariables()[0] != v1)
+				nodeV1 = nodeV1.right;
 
+			if (nodeV1.right == null) return null;
+			else
+				searchNode = nodeV1.right;
+		}
+		else {
+			while (nodeV1.left != null && nodeV1.left.getVariables()[0] != v1)
+				nodeV1 = nodeV1.left;
+
+			if (nodeV1.left == null) return null;
+			else
+				searchNode = nodeV1.left;
+		}
+
+		if (v2 > 0) {
+			while (searchNode.up != null && searchNode.up.getVariables()[1] != v2)
+				searchNode = searchNode.up;
+
+			if (searchNode.up == null) return null;
+			else
+				searchNode = searchNode.up;
+
+			return searchNode;
+		}
+		else {
+			while (searchNode.down != null && searchNode.down.getVariables()[1] != v2)
+				searchNode = searchNode.down;
+
+			if (searchNode.down == null) return null;
+			else
+				searchNode = searchNode.down;
+
+			return searchNode;
+		}
 	}
 
 	public Node[] toArray() {
+
 	}
 
 	public float calculateValue(Function function, int v1, int v2) {
