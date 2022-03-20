@@ -384,27 +384,7 @@ public class Interface {
 
 	public float findMaxValue() {
 		if (numNodes == 0) return Float.NaN;
-
-		Node nodeV1 = origin;
-
-		//Go to end of x axis
-		while (nodeV1.right != null)
-			nodeV1 = nodeV1.right;
-
-		Node nodeV2 = nodeV1;
-
-		//Get nodeV2 to the top
-		while (nodeV2.up != null)
-			nodeV2 = nodeV2.up;
-
-		return nodeV2.getValue();
-	}
-
-	public Node findMax() {
-	}
-
-	public float findMinValue() {
-		if (numNodes == 0) return Float.NaN;
+		float maxValue = 0;
 
 		Node nodeV1 = origin;
 
@@ -412,16 +392,228 @@ public class Interface {
 		while (nodeV1.left != null)
 			nodeV1 = nodeV1.left;
 
-		Node nodeV2 = nodeV1;
+		Node nodeV2 = null;
 
-		//Get nodeV2 to the bottom
-		while (nodeV2.down != null)
-			nodeV2 = nodeV2.down;
+		while (nodeV1.right != null) {
+			nodeV2 = nodeV1;
 
-		return nodeV2.getValue();
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					//If function is the head
+					if (nodeV2.getValue() > maxValue) {
+						maxValue = nodeV2.getValue();
+
+						if (nodeV2.prevVal != null) {
+							Node sameNode = nodeV2;
+
+							while (sameNode.prevVal != null) {
+								if (sameNode.getValue() > maxValue)
+									maxValue = sameNode.getValue();
+
+								sameNode = sameNode.prevVal;
+							}
+						}
+					}
+					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							if (sameNode.getValue() > maxValue)
+								maxValue = sameNode.getValue();
+
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+
+		return maxValue;
+	}
+
+	public Node findMax() {
+		if (numNodes == 0) return null;
+		float maxValue = findMaxValue();
+		Node maxNode = null;
+
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
+
+		Node nodeV2 = null;
+
+		while (nodeV2.getValue() != maxValue) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					//If function is the head
+					if (nodeV2.getValue() == maxValue) {
+						maxNode = nodeV2;
+
+						if (nodeV2.prevVal != null) {
+							Node sameNode = nodeV2;
+
+							while (sameNode.prevVal != null) {
+								if (sameNode.getValue() == maxValue)
+									maxNode = nodeV2;
+
+								sameNode = sameNode.prevVal;
+							}
+						}
+					}
+					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							if (sameNode.getValue() == maxValue)
+								maxNode = nodeV2;
+
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+
+		return maxNode;
+	}
+
+	public float findMinValue() {
+		if (numNodes == 0) return Float.NaN;
+		float minValue = findMaxValue();
+
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
+
+		Node nodeV2 = null;
+
+		while (nodeV1.right != null) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					//If function is the head
+					if (nodeV2.getValue() < minValue) {
+						minValue = nodeV2.getValue();
+
+						if (nodeV2.prevVal != null) {
+							Node sameNode = nodeV2;
+
+							while (sameNode.prevVal != null) {
+								if (sameNode.getValue() < minValue)
+									minValue = sameNode.getValue();
+
+								sameNode = sameNode.prevVal;
+							}
+						}
+					}
+					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							if (sameNode.getValue() < minValue)
+								minValue = sameNode.getValue();
+
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+
+		return minValue;
 	}
 
 	public Node findMin() {
+		if (numNodes == 0) return null;
+		float minValue = findMinValue();
+		Node minNode = null;
+
+		Node nodeV1 = origin;
+
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
+
+		Node nodeV2 = null;
+
+		while (nodeV2.getValue() != minValue) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
+					//If function is the head
+					if (nodeV2.getValue() == minValue) {
+						minNode = nodeV2;
+
+						if (nodeV2.prevVal != null) {
+							Node sameNode = nodeV2;
+
+							while (sameNode.prevVal != null) {
+								if (sameNode.getValue() == minValue)
+									minNode = nodeV2;
+
+								sameNode = sameNode.prevVal;
+							}
+						}
+					}
+					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes
+						Node sameNode = nodeV2;
+
+						while (sameNode.prevVal != null) {
+							if (sameNode.getValue() == minValue)
+								minNode = nodeV2;
+
+							sameNode = sameNode.prevVal;
+						}
+					}
+				}
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+
+		return minNode;
 	}
 
 	public String printFunctionValues(String functionName) {
@@ -575,10 +767,48 @@ public class Interface {
 
 	public int[] numPointsPerQuadrant(){
 		int[] indexArray = new int[4];
+		int q1 = 0;
+		int q2 = 0;
+		int q3 = 0;
+		int q4 = 0;
 
+		Node nodeV1 = origin;
 
+		//Go to end of x axis
+		while (nodeV1.left != null)
+			nodeV1 = nodeV1.left;
 
+		Node nodeV2 = null;
 
+		while (nodeV1.right != null) {
+			nodeV2 = nodeV1;
+
+			//Get nodeV2 to the bottom
+			while (nodeV2.down != null)
+				nodeV2 = nodeV2.down;
+
+			//Traverse up y axis
+			while (nodeV2.up != null) {
+
+				if (nodeV2.getVariables()[0] < 0 && nodeV2.getVariables()[1] < 0)
+					q3++;
+				else if (nodeV2.getVariables()[0] < 0 && nodeV2.getVariables()[1] > 0)
+					q2++;
+				else if (nodeV2.getVariables()[0] > 0 && nodeV2.getVariables()[1] < 0)
+					q4++;
+				else if (nodeV2.getVariables()[0] > 0 && nodeV2.getVariables()[1] > 0)
+					q1++;
+
+				nodeV2 = nodeV2.up;
+			}
+
+			nodeV1 = nodeV1.right;
+		}
+
+		indexArray[0] = q1;
+		indexArray[1] = q2;
+		indexArray[2] = q3;
+		indexArray[3] = q4;
 
 		return indexArray;
 	}
@@ -721,31 +951,31 @@ public class Interface {
 
 		//Order in ascending by function
 		if (walkerName.compareTo(newNodeName) > 0) { //Attach to nextVal
-			while (node.nextVal != null && walkerName.compareTo(newNodeName) > 0) {
-				node = node.nextVal;
+			while (node.prevVal != null && walkerName.compareTo(newNodeName) > 0) {
+				node = node.prevVal;
 				walkerName = node.getFunction().getFunctionName();
 			}
 
-			if (node.nextVal == null) {
-				newNode.prevVal = node;
-				node.nextVal = newNode;
+			if (node.prevVal == null) {
+				newNode.nextVal = node;
+				node.prevVal = newNode;
 			}
 			else {
-				Node nextNode = newNode.nextVal;
+				Node nextNode = newNode.prevVal;
 
-				nextNode = node.nextVal;
-				newNode.prevVal = node;
-				node.nextVal = newNode;
-				nextNode.prevVal = newNode;
+				nextNode = node.prevVal;
+				newNode.nextVal = node;
+				node.prevVal = newNode;
+				nextNode.nextVal = newNode;
 			}
 		}
 		else { //Attach to beginning, make new head
-			Node nextNode = newNode.nextVal;
+			Node nextNode = newNode.prevVal;
 
-			nextNode = node.nextVal;
-			newNode.prevVal = node;
-			node.nextVal = newNode;
-			nextNode.prevVal = newNode;
+			nextNode = node.prevVal;
+			newNode.nextVal = node;
+			node.prevVal = newNode;
+			nextNode.nextVal = newNode;
 		}
 		newNode.left = null;
 		newNode.up = null;
