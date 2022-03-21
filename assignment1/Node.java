@@ -49,12 +49,35 @@ public class Node {
 	public String[] getNodeLinks(){
 		String[] outputArray = new String[6];
 
-		outputArray[0] = "U["+up.v1+"]["+up.v2+"]{"+floatFormatter(up.getValue())+"}";
-		outputArray[1] = "D["+down.v1+"]["+down.v2+"]{"+floatFormatter(down.getValue())+"}";
-		outputArray[2] = "R["+right.v1+"]["+right.v2+"]{"+floatFormatter(right.getValue())+"}";
-		outputArray[3] = "L["+left.v1+"]["+left.v2+"]{"+floatFormatter(left.getValue())+"}";
-		outputArray[4] = "P["+prevVal.v1+"]["+prevVal.v2+"]{"+floatFormatter(prevVal.getValue())+"}";
-		outputArray[5] = "N["+nextVal.v1+"]["+nextVal.v2+"]{"+floatFormatter(nextVal.getValue())+"}";
+		if (up == null)
+			outputArray[0] = "U[][]{}";
+		else
+			outputArray[0] = "U["+up.v1+"]["+up.v2+"]{"+floatFormatter(up.getValue())+"}";
+
+		if (down == null)
+			outputArray[1] = "D[][]{}";
+		else
+			outputArray[1] = "D["+down.v1+"]["+down.v2+"]{"+floatFormatter(down.getValue())+"}";
+
+		if (right == null)
+			outputArray[2] = "R[][]{}";
+		else
+			outputArray[2] = "R["+right.v1+"]["+right.v2+"]{"+floatFormatter(right.getValue())+"}";
+
+		if (left == null)
+			outputArray[3] = "L[][]{}";
+		else
+			outputArray[3] = "L["+left.v1+"]["+left.v2+"]{"+floatFormatter(left.getValue())+"}";
+
+		if (prevVal == null)
+			outputArray[4] = "P[][]{}";
+		else
+			outputArray[4] = "P["+prevVal.v1+"]["+prevVal.v2+"]{"+floatFormatter(prevVal.getValue())+"}";
+
+		if (nextVal == null)
+			outputArray[5] = "N[][]{}";
+		else
+			outputArray[5] = "N["+nextVal.v1+"]["+nextVal.v2+"]{"+floatFormatter(nextVal.getValue())+"}";
 
 		return outputArray;
 	}
