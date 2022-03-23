@@ -144,7 +144,7 @@ public class main {
         System.out.println("Going in                 " + "V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " // Should be function 4");
         curT = curT.nextVal;
         System.out.println("Coming Out               ");
-        
+
         curT = curT.left;
         System.out.println("Finding Tashas Nodes...2 " + "V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " // Should be function 1");
         curT = curT.prevVal;
@@ -178,7 +178,8 @@ public class main {
         System.out.println(Kyle.printFunctionValues((new ExampleFunction3()).getFunctionName())  + "// 0 Nodes");
         System.out.println(Kyle.printFunctionValues((new ExampleFunction4()).getFunctionName())  + "// 0 Nodes");
 
-        System.out.println("\n========Removing Points========");
+
+        System.out.println("\n========Admin...========");System.out.println("\n========Removing Points========");
 
         Kyle.removePoint( 17, 3);
         Kyle.removePoint(-1, 3);
@@ -193,7 +194,7 @@ public class main {
         Tasha.removePoint(0, 11);
         Tasha.removePoint(2, 0);
         Tasha.removePoint(0, 0); //testing axis deletion (shouldn't work)
-        
+
         System.out.println("Tasha");
         System.out.println(Tasha.printFunctionValues((new ExampleFunction1()).getFunctionName())  + "// 4 Nodes");
         System.out.println(Tasha.printFunctionValues((new ExampleFunction2()).getFunctionName())  + "       // 2 Nodes");
@@ -212,13 +213,9 @@ public class main {
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 1 up");
         curT = curT.up;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 1 up");
-        
-        if(curT.up != null){
-            System.out.println("\n BLERP \n BLERP \n BLERP\n BLERP LOOKS LIKE YOUR Y AXIS ISN'T DELETING WITH YOUR NODES");
-        }
 
         Tasha.addPoint(new ExampleFunction4().clone(), 1, 22);
-        
+
         curT = curT.up;
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 2 up");
         curT = curT.down;
@@ -226,32 +223,19 @@ public class main {
 
         Tasha.removePoint(1, 22);
 
-        if(curT.up != null){
-            System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         LOOKS LIKE YOUR Y AXIS ISN'T DELETING WITH YOUR NODES====================!!!=============");
-        }
-
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 3 start");
 
         Tasha.addPoint(new ExampleFunction4().clone(), 1, 22);
         Tasha.addPoint(new ExampleFunction4().clone(), -3, 22);
-        
+
         curT = curT.up;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 3 up");
         curT = curT.down;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 3 down");
 
         Tasha.removePoint(1, 22);
-        
-
-        if(curT.up == null){
-            System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         THIS AXIS SHOULD NOT DELETED====================!!!=============");
-        }
 
         Tasha.removePoint(-3, 22);
-
-        if(curT.up != null){
-            System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         LOOKS LIKE YOUR Y AXIS ISN'T DELETING WITH YOUR NODES====================!!!=============");
-        }
 
         Tasha.addPoint(new ExampleFunction4().clone(), 1, 22);
         Tasha.addPoint(new ExampleFunction3().clone(), 1, 22);
@@ -263,25 +247,15 @@ public class main {
 
         Tasha.removePoint(1, 22);
 
-        if(curT.up == null){
-            System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         THIS AXIS SHOULD NOT DELETED====================!!!=============");
-        }
-
         curT = curT.up;
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 5 up");
         curT = curT.down;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 5 down");
 
-        
+
         Tasha.addPoint(new ExampleFunction3().clone(), 1, 23);
         Tasha.removePoint(1, 22);
 
-        if(curT.up == null){
-            System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         THIS AXIS SHOULD NOT DELETED====================!!!=============");
-        }
-
-       
-        
         curT = curT.up;
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v2 test 6 up");
         curT = curT.down;
@@ -290,21 +264,21 @@ public class main {
         Tasha.removePoint(1, 23);
         //-----------------------V1axis test--------------------
 
-        Tasha.addPoint(new ExampleFunction1().clone(), 21, 20);
-        Tasha.removePoint(21, 20);
+//        Tasha.addPoint(new ExampleFunction1().clone(), 21, 20);
+//        Tasha.removePoint(21, 20);
 
         curT = Tasha.getOrigin();
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 1 origin");
         curT = curT.right;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 1 right");
-        
-        
+
+
         if(curT.right != null){
             System.out.println("\n BLERP \n BLERP \n BLERP\n BLERP LOOKS LIKE YOUR Y AXIS ISN'T DELETING WITH YOUR NODES");
         }
 
         Tasha.addPoint(new ExampleFunction4().clone(), 21, 22);
-        
+
         curT = curT.right;
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 2 right");
         curT = curT.left;
@@ -320,14 +294,14 @@ public class main {
 
         Tasha.addPoint(new ExampleFunction4().clone(), 21, 22);
         Tasha.addPoint(new ExampleFunction4().clone(), 21, -22);
-        
+
         curT = curT.right;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 3 right");
         curT = curT.left;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 3 left");
 
         Tasha.removePoint(21, 22);
-        
+
 
         if(curT.right == null){
             System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         THIS AXIS SHOULD NOT DELETED====================!!!=============");
@@ -358,7 +332,7 @@ public class main {
         curT = curT.left;
         System.out.println("V1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 5 left");
 
-        
+
         Tasha.addPoint(new ExampleFunction3().clone(), 21, 23);
         Tasha.removePoint(21, 22);
 
@@ -366,8 +340,8 @@ public class main {
             System.out.println("\nBLERP \n          BLERP \n                    BLERP\n                              BLERP\n                                         THIS AXIS SHOULD NOT DELETED====================!!!=============");
         }
 
-       
-        
+
+
         curT = curT.right;
         System.out.println("\nV1: " + curT.getVariables()[0] + " V2: " + curT.getVariables()[1] + " " + curT.getFunction().getFunctionName() + " Axis v1 test 6 right");
         curT = curT.left;
@@ -401,7 +375,6 @@ public class main {
         Kyle.addPoint(new ExampleFunction3().clone(), -420, -56);
         Kyle.addPoint(new ExampleFunction4().clone(), 11, 3);
 
-        System.out.println("\n========Admin...========");
 
         System.out.println("\n--------Counting Kyle's nodes--------");
         System.out.println(Kyle.countNumberOfPoints());
@@ -626,7 +599,7 @@ public class main {
         System.out.println("countNumberOfPoints, Kyle, should be 35");
         System.out.println(Kyle.countNumberOfPoints());
         System.out.println("\ncountNumberOfPoints, Tasha, should be 9");
-        System.out.println(Tasha.countNumberOfPoints()); 
+        System.out.println(Tasha.countNumberOfPoints());
 
         Kyle.clearAllData();
         Tasha.clearAllData();

@@ -21,6 +21,11 @@ public class Interface {
 	}
 
 	public Interface(Node[] arr) {
+		Function originFunction = new Origin();
+		origin = new Node(originFunction, 0, 0);
+		origin.right = origin.left = origin.down = origin.up = null;
+		origin.prevVal = origin.nextVal = null;
+
 		for (int i = 0; i < arr.length; i++)
 			if (arr[i] != null)
 				addPoint(arr[i].getFunction(),arr[i].getVariables()[0], arr[i].getVariables()[1]);
@@ -49,77 +54,84 @@ public class Interface {
 		else
 			nodeLinked = moveDown(nodeV2, v2, newNode);
 
-		//Get node on y axis
-		Node yAxis = origin;
-		Function yAxisNode = new V1Axis();
-		Node yNode = new Node(yAxisNode, 0, v2);
+		if (nodeLinked.nextVal == null) {
+			//Get node on y axis
+			Node yAxis = origin;
+			Function yAxisNode = new V1Axis();
+			Node yNode = new Node(yAxisNode, 0, v2);
 
-		if (v2 > 0) {
-			while (yAxis.up != null && yAxis.up.getVariables()[1] < v2)
-				yAxis = yAxis.up;
+			if (v2 > 0) {
+				while (yAxis.up != null && yAxis.up.getVariables()[1] < v2)
+					yAxis = yAxis.up;
 
-			if (yAxis.up == null) {
-				yAxis.up = yNode;
-				yNode.down = yAxis;
+				if (yAxis.up == null) {
+					yAxis.up = yNode;
+					yNode.down = yAxis;
 
-				yAxis = yAxis.up;
+					yAxis = yAxis.up;
+				} else if (yAxis.up.getVariables()[1] > v2) {
+					//Insert node in between doubly linked list
+					Node nextNode = yAxis.up;
+
+					yNode.up = nextNode;
+					nextNode.down = yNode;
+					yNode.down = yAxis;
+					yAxis.up = yNode;
+
+					yAxis = yAxis.up;
+				} else {
+					yAxis = yAxis.up;
+				}
+			} else {
+				while (yAxis.down != null && yAxis.down.getVariables()[1] > v2)
+					yAxis = yAxis.down;
+
+				if (yAxis.down == null) {
+					yAxis.down = yNode;
+					yNode.up = yAxis;
+
+					yAxis = yAxis.down;
+				} else if (yAxis.down.getVariables()[1] < v2) {
+					//Insert node in between doubly linked list
+					Node nextNode = yAxis.down;
+
+					yNode.down = nextNode;
+					nextNode.up = yNode;
+					yNode.up = yAxis;
+					yAxis.down = yNode;
+
+					yAxis = yAxis.down;
+				} else {
+					yAxis = yAxis.down;
+				}
 			}
-			else if (yAxis.up.getVariables()[1] > v2) {
-				//Insert node in between doubly linked list
-				Node nextNode = yAxis.up;
 
-				yNode.up = nextNode;
-				nextNode.down = yNode;
-				yNode.down = yAxis;
-				yAxis.up = yNode;
+			//Connect yAxis to new node
+			if (v1 > 0) {
+				while (yAxis.right != null && yAxis.right.getVariables()[0] < v1)
+					yAxis = yAxis.right;
 
-				yAxis = yAxis.up;
+				if (yAxis.right != null) {
+					nodeLinked.right = yAxis.right;
+					yAxis.right.left = nodeLinked;
+				}
+
+				yAxis.right = nodeLinked;
+				nodeLinked.left = yAxis;
+
+			} else {
+				while (yAxis.left != null && yAxis.left.getVariables()[0] > v1)
+					yAxis = yAxis.left;
+
+				if (yAxis.left != null) {
+					nodeLinked.left = yAxis.left;
+					yAxis.left.right = nodeLinked;
+				}
+
+				yAxis.left = nodeLinked;
+				nodeLinked.right = yAxis;
+
 			}
-			else {
-				yAxis = yAxis.up;
-			}
-		}
-		else {
-			while (yAxis.down != null && yAxis.down.getVariables()[1] > v2)
-				yAxis = yAxis.down;
-
-			if (yAxis.down == null) {
-				yAxis.down = yNode;
-				yNode.up = yAxis;
-
-				yAxis = yAxis.down;
-			}
-			else if (yAxis.down.getVariables()[1] < v2) {
-				//Insert node in between doubly linked list
-				Node nextNode = yAxis.down;
-
-				yNode.down = nextNode;
-				nextNode.up = yNode;
-				yNode.up = yAxis;
-				yAxis.down = yNode;
-
-				yAxis = yAxis.down;
-			}
-			else {
-				yAxis = yAxis.down;
-			}
-		}
-
-		//Connect yAxis to new node
-		if (v1 > 0) {
-			while (yAxis.right != null && yAxis.right.getVariables()[0] < v1)
-				yAxis = yAxis.right;
-
-			yAxis.right = nodeLinked;
-			nodeLinked.left = yAxis;
-
-		}
-		else {
-			while (yAxis.left != null && yAxis.left.getVariables()[0] > v1)
-				yAxis = yAxis.left;
-
-			yAxis.left = nodeLinked;
-			nodeLinked.right = yAxis;
 		}
 
 		return newNode.getValue();
@@ -213,8 +225,8 @@ public class Interface {
 					deleteNode.right.left = deleteNode.prevVal;
 					deleteNode.prevVal.right = deleteNode.right;
 				}
-				else
-					deleteNode.prevVal.nextVal = null;
+
+				deleteNode.prevVal.nextVal = null;
 			}
 			else {
 				deleteNode.left.right = deleteNode.right;
@@ -230,7 +242,9 @@ public class Interface {
 
 			if (nodeV1Check.up == null && nodeV1Check.down == null) {
 				nodeV1Check.left.right = nodeV1Check.right;
-				nodeV1Check.right.left = nodeV1Check.left;
+
+				if (nodeV1Check.right != null)
+					nodeV1Check.right.left = nodeV1Check.left;
 			}
 		}else {
 			if (deleteNode.prevVal != null) {
@@ -241,8 +255,8 @@ public class Interface {
 					deleteNode.left.right = deleteNode.prevVal;
 					deleteNode.prevVal.left = deleteNode.left;
 				}
-				else
-					deleteNode.prevVal.nextVal = null;
+
+				deleteNode.prevVal.nextVal = null;
 			}
 			else {
 				deleteNode.right.left = deleteNode.left;
@@ -258,7 +272,9 @@ public class Interface {
 
 			if (nodeV1Check.up == null && nodeV1Check.down == null) {
 				nodeV1Check.right.left = nodeV1Check.left;
-				nodeV1Check.left.right = nodeV1Check.right;
+
+				if (nodeV1Check.left != null)
+					nodeV1Check.left.right = nodeV1Check.right;
 			}
 		}
 
@@ -269,8 +285,10 @@ public class Interface {
 				nodeV2Check = nodeV2Check.up;
 
 			if (nodeV2Check.right == null && nodeV2Check.left == null) {
-				nodeV2Check.up.down = nodeV2Check.down;
 				nodeV2Check.down.up = nodeV2Check.up;
+
+				if (nodeV2Check.up != null)
+					nodeV2Check.up.down = nodeV2Check.down;
 			}
 		}
 		else {
@@ -280,7 +298,9 @@ public class Interface {
 
 			if (nodeV2Check.right == null && nodeV2Check.left == null) {
 				nodeV2Check.up.down = nodeV2Check.down;
-				nodeV2Check.down.up = nodeV2Check.up;
+
+				if (nodeV2Check.down != null)
+					nodeV2Check.down.up = nodeV2Check.up;
 			}
 		}
 
@@ -335,7 +355,7 @@ public class Interface {
 	public Node[] toArray() {
 		if (numNodes == 0) return null;
 
-		Node[] array = new Node[numNodes-1];
+		Node[] array = new Node[numNodes];
 		int i = 0;
 		Node nodeV1 = origin;
 
@@ -345,7 +365,7 @@ public class Interface {
 
 		Node nodeV2 = null;
 
-		while (nodeV1.left != null) {
+		while (nodeV1 != null) {
 			nodeV2 = nodeV1;
 
 			//Get nodeV2 to the top
@@ -353,15 +373,15 @@ public class Interface {
 				nodeV2 = nodeV2.up;
 
 			//Traverse down y axis
-			while (nodeV2.down != null) {
+			while (nodeV2 != null) {
 				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
-					if (nodeV2.prevVal == null) {
+					if (nodeV2.prevVal == null && i < numNodes) {
 						array[i++] = nodeV2;
 					}
 					else {
 						Node sameNode = nodeV2;
 
-						while (sameNode != null) {
+						while (sameNode != null  && i < numNodes) {
 							array[i++] = nodeV2;
 							sameNode = sameNode.prevVal;
 						}
@@ -394,7 +414,7 @@ public class Interface {
 
 		Node nodeV2 = null;
 
-		while (nodeV1.right != null) {
+		while (nodeV1 != null) {
 			nodeV2 = nodeV1;
 
 			//Get nodeV2 to the bottom
@@ -402,7 +422,7 @@ public class Interface {
 				nodeV2 = nodeV2.down;
 
 			//Traverse up y axis
-			while (nodeV2.up != null) {
+			while (nodeV2 != null) {
 				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
 					//If function is the head
 					if (nodeV2.getValue() > maxValue) {
@@ -442,8 +462,9 @@ public class Interface {
 
 	public Node findMax() {
 		if (numNodes == 0) return null;
+		boolean found = false;
 		float maxValue = findMaxValue();
-		Node maxNode = null;
+		Node maxNode = origin;
 
 		Node nodeV1 = origin;
 
@@ -451,9 +472,9 @@ public class Interface {
 		while (nodeV1.left != null)
 			nodeV1 = nodeV1.left;
 
-		Node nodeV2 = null;
+		Node nodeV2 = nodeV1;
 
-		while (nodeV2.getValue() != maxValue) {
+		while (nodeV1 != null && nodeV2.getValue() != maxValue) {
 			nodeV2 = nodeV1;
 
 			//Get nodeV2 to the bottom
@@ -461,10 +482,11 @@ public class Interface {
 				nodeV2 = nodeV2.down;
 
 			//Traverse up y axis
-			while (nodeV2.up != null) {
+			while (nodeV2 != null) {
 				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
 					//If function is the head
 					if (nodeV2.getValue() == maxValue) {
+						found = true;
 						maxNode = nodeV2;
 
 						if (nodeV2.prevVal != null) {
@@ -493,7 +515,10 @@ public class Interface {
 				nodeV2 = nodeV2.up;
 			}
 
-			nodeV1 = nodeV1.right;
+			if (found)
+				return maxNode;
+			else
+				nodeV1 = nodeV1.right;
 		}
 
 		return maxNode;
@@ -511,7 +536,7 @@ public class Interface {
 
 		Node nodeV2 = null;
 
-		while (nodeV1.right != null) {
+		while (nodeV1 != null) {
 			nodeV2 = nodeV1;
 
 			//Get nodeV2 to the bottom
@@ -519,7 +544,7 @@ public class Interface {
 				nodeV2 = nodeV2.down;
 
 			//Traverse up y axis
-			while (nodeV2.up != null) {
+			while (nodeV2 != null) {
 				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
 					//If function is the head
 					if (nodeV2.getValue() < minValue) {
@@ -560,7 +585,8 @@ public class Interface {
 	public Node findMin() {
 		if (numNodes == 0) return null;
 		float minValue = findMinValue();
-		Node minNode = null;
+		Node minNode = origin;
+		boolean found = false;
 
 		Node nodeV1 = origin;
 
@@ -568,9 +594,9 @@ public class Interface {
 		while (nodeV1.left != null)
 			nodeV1 = nodeV1.left;
 
-		Node nodeV2 = null;
+		Node nodeV2 = nodeV1;
 
-		while (nodeV2.getValue() != minValue) {
+		while (nodeV1 != null && nodeV2 != null && nodeV2.getValue() != minValue) {
 			nodeV2 = nodeV1;
 
 			//Get nodeV2 to the bottom
@@ -578,10 +604,11 @@ public class Interface {
 				nodeV2 = nodeV2.down;
 
 			//Traverse up y axis
-			while (nodeV2.up != null) {
+			while (nodeV2 != null) {
 				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
 					//If function is the head
 					if (nodeV2.getValue() == minValue) {
+						found = true;
 						minNode = nodeV2;
 
 						if (nodeV2.prevVal != null) {
@@ -610,7 +637,10 @@ public class Interface {
 				nodeV2 = nodeV2.up;
 			}
 
-			nodeV1 = nodeV1.right;
+			if (found)
+				return minNode;
+			else
+				nodeV1 = nodeV1.right;
 		}
 
 		return minNode;
@@ -670,8 +700,8 @@ public class Interface {
 			nodeV1 = nodeV1.right;
 		}
 
-
-		output = output.substring(0,output.length() - 1);
+		if (output != "")
+			output = output.substring(0,output.length() - 1);
 		return output;
 	}
 
@@ -688,7 +718,7 @@ public class Interface {
 
 		Node nodeV2 = null;
 
-		while (nodeV1.right != null) {
+		while (nodeV1 != null) {
 			nodeV2 = nodeV1;
 
 			//Get nodeV2 to the bottom
@@ -696,7 +726,7 @@ public class Interface {
 				nodeV2 = nodeV2.down;
 
 			//Traverse up y axis
-			while (nodeV2.up != null) {
+			while (nodeV2 != null) {
 				if (nodeV2.getVariables()[0] != 0 && nodeV2.getVariables()[1] != 0) {
 					//If function is the head
 					if (nodeV2.getFunction().getFunctionName().compareTo(functionName) == 0) {
@@ -719,22 +749,29 @@ public class Interface {
 						else {
 							numRemoved++;
 							numNodes--;
-							nodeV2.prevVal.left = nodeV2.left;
-							if (nodeV2.left != null)
+
+							if (nodeV2.left != null) {
+								nodeV2.prevVal.left = nodeV2.left;
 								nodeV2.left.right = nodeV2.prevVal;
+							}
 
-							nodeV2.prevVal.right = nodeV2.right;
-							if (nodeV2.right != null)
+							if (nodeV2.right != null) {
+								nodeV2.prevVal.right = nodeV2.right;
 								nodeV2.right.left = nodeV2.prevVal;
+							}
 
-							nodeV2.prevVal.up = nodeV2.up;
-							if (nodeV2.up != null)
+
+							if (nodeV2.up != null) {
+								nodeV2.prevVal.up = nodeV2.up;
 								nodeV2.up.down = nodeV2.prevVal;
+							}
 
-							nodeV2.prevVal.down = nodeV2.down;
-
-							if (nodeV2.down != null)
+							if (nodeV2.down != null) {
+								nodeV2.prevVal.down = nodeV2.down;
 								nodeV2.down.up = nodeV2.prevVal;
+							}
+
+							nodeV2.prevVal.nextVal = null;
 						}
 					}
 					else if (nodeV2.prevVal != null) { //function isn't head, still need to check other nodes

@@ -28,8 +28,8 @@ public class Node {
 	}
 
 	public Function setFunction(Function function) {
-		Function copy = nodeFunction;
-		nodeFunction = function;
+		Function copy = nodeFunction.clone();
+		nodeFunction = copy;
 		return copy;
 	}
 
@@ -43,7 +43,10 @@ public class Node {
 	}
 
 	public Function getFunction(){
-		return nodeFunction;
+		if (nodeFunction != null)
+			return nodeFunction;
+		else
+			return null;
 	}
 
 	public String[] getNodeLinks(){
