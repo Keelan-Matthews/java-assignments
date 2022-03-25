@@ -541,65 +541,65 @@ public class main {
 
 
 
-        Kyle.removeAllFunctionPoints("Example function 3");
-        Kyle.removeAllFunctionPoints("Example function 4");
-        Kyle.removeAllFunctionPoints("Example function 1");
-
-        Kyle.removePoint(1, -1);
-        Kyle.removePoint(1, -1);
-
-        Kyle.removePoint(2, 2);
-        Kyle.removePoint(2, 2);
-
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-
-        curK = curK.right;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.right;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.right;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.down;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.down;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.down;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "            HuP!");
-        curK = curK.down;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "  PLONK!");
-        curK = curK.right;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.up;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.up;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.up;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " HuP!");
-        curK = curK.up;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " PLONK");
-        curK = curK.right;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
-        curK = curK.down;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " Hup!");
-        curK = curK.left;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " PLONK... Hup!");
-        curK = curK.right;
-        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " PLONK");
-
-        System.out.println("\n========Node/Function things========");
-
-        System.out.println("\nGet point/Get value");
-        System.out.println(Kyle.getPoint(1, 1).getValue());
-
-        System.out.println("Null function test");
-        Function testFunc = null;
-        Node testNode = new Node(testFunc, 5, 5);
-        System.out.println(testNode.getValue());
-
-        System.out.println("countNumberOfPoints, Kyle, should be 35");
-        System.out.println(Kyle.countNumberOfPoints());
-        System.out.println("\ncountNumberOfPoints, Tasha, should be 9");
-        System.out.println(Tasha.countNumberOfPoints());
+//        Kyle.removeAllFunctionPoints("Example function 3");
+//        Kyle.removeAllFunctionPoints("Example function 4");
+//        Kyle.removeAllFunctionPoints("Example function 1");
+//
+//        Kyle.removePoint(1, -1);
+//        Kyle.removePoint(1, -1);
+//
+//        Kyle.removePoint(2, 2);
+//        Kyle.removePoint(2, 2);
+//
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//
+//        curK = curK.right;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.right;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.right;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.down;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.down;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.down;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "            HuP!");
+//        curK = curK.down;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "  PLONK!");
+//        curK = curK.right;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.up;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.up;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.up;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " HuP!");
+//        curK = curK.up;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " PLONK");
+//        curK = curK.right;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + "");
+//        curK = curK.down;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " Hup!");
+//        curK = curK.left;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " PLONK... Hup!");
+//        curK = curK.right;
+//        System.out.println("V1: " + curK.getVariables()[0] + " V2: " + curK.getVariables()[1] + " " + curK.getFunction().getFunctionName() + " PLONK");
+//
+//        System.out.println("\n========Node/Function things========");
+//
+//        System.out.println("\nGet point/Get value");
+//        System.out.println(Kyle.getPoint(1, 1).getValue());
+//
+//        System.out.println("Null function test");
+//        Function testFunc = null;
+//        Node testNode = new Node(testFunc, 5, 5);
+//        System.out.println(testNode.getValue());
+//
+//        System.out.println("countNumberOfPoints, Kyle, should be 35");
+//        System.out.println(Kyle.countNumberOfPoints());
+//        System.out.println("\ncountNumberOfPoints, Tasha, should be 9");
+//        System.out.println(Tasha.countNumberOfPoints());
 
         Kyle.clearAllData();
         Tasha.clearAllData();
@@ -671,7 +671,16 @@ public class main {
             System.out.println("Problem");
         System.out.println(n4.getFunction().getFunctionName());
         System.out.println(n4.getValue() + " == " + interface1.calculateValue((new ExampleFunction2()), 1, 1));
-        
+
+        interface1.removeAllFunctionPoints("Example function 2");
+        interface1.removePoint(1,1);
+        System.out.println(interface1.findMax().getValue());
+        System.out.println(interface1.findMin().getValue());
+        System.out.println(interface1.findMaxValue());
+        System.out.println(interface1.findMinValue());
+
+        Node n = new Node(null,0,0);
+        System.out.println(n.getValue());
     }
 }
 

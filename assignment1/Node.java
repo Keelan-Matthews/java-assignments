@@ -24,12 +24,14 @@ public class Node {
 		this.v1 = v1;
 		this.v2 = v2;
 
-		nodeFunction = function.clone();
+		if (function != null) {
+			nodeFunction = function.clone();
+		}
 	}
 
 	public Function setFunction(Function function) {
-		Function copy = nodeFunction.clone();
-		nodeFunction = copy;
+		Function copy = nodeFunction;
+		nodeFunction = function;
 		return copy;
 	}
 
@@ -43,10 +45,7 @@ public class Node {
 	}
 
 	public Function getFunction(){
-		if (nodeFunction != null)
-			return nodeFunction;
-		else
-			return null;
+		return nodeFunction;
 	}
 
 	public String[] getNodeLinks(){

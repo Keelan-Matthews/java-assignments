@@ -475,8 +475,6 @@ public class Interface {
 		Node nodeV2 = nodeV1;
 
 		while (nodeV1 != null && nodeV2.getValue() != maxValue) {
-			nodeV2 = nodeV1;
-
 			//Get nodeV2 to the bottom
 			while (nodeV2.down != null)
 				nodeV2 = nodeV2.down;
@@ -517,8 +515,10 @@ public class Interface {
 
 			if (found)
 				return maxNode;
-			else
+			else {
 				nodeV1 = nodeV1.right;
+				nodeV2 = nodeV1;
+			}
 		}
 
 		return maxNode;
@@ -596,9 +596,7 @@ public class Interface {
 
 		Node nodeV2 = nodeV1;
 
-		while (nodeV1 != null && nodeV2 != null && nodeV2.getValue() != minValue) {
-			nodeV2 = nodeV1;
-
+		while (nodeV1 != null && nodeV2.getValue() != minValue) {
 			//Get nodeV2 to the bottom
 			while (nodeV2.down != null)
 				nodeV2 = nodeV2.down;
@@ -639,8 +637,10 @@ public class Interface {
 
 			if (found)
 				return minNode;
-			else
+			else {
 				nodeV1 = nodeV1.right;
+				nodeV2 = nodeV1;
+			}
 		}
 
 		return minNode;
@@ -779,7 +779,8 @@ public class Interface {
 
 						while (sameNode != null) {
 							if (sameNode.getFunction().getFunctionName().compareTo(functionName) == 0) {
-								sameNode.prevVal.nextVal = sameNode.nextVal;
+								if (sameNode.prevVal != null)
+									sameNode.prevVal.nextVal = sameNode.nextVal;
 								sameNode.nextVal.prevVal = sameNode.prevVal;
 								numRemoved++;
 								numNodes--;
@@ -869,14 +870,27 @@ public class Interface {
 	}
 
 	public void clearAllData(){
-		origin.right.left = null;
-		origin.right = null;
-		origin.left.right = null;
-		origin.left = null;
-		origin.up.down = null;
-		origin.up = null;
-		origin.down.up = null;
-		origin.down = null;
+		if (origin.right != null) {
+			origin.right.left = null;
+			origin.right = null;
+		}
+
+		if (origin.left != null) {
+			origin.left.right = null;
+			origin.left = null;
+		}
+
+		if (origin.up != null) {
+			origin.up.down = null;
+			origin.up = null;
+		}
+
+		if (origin.down != null) {
+			origin.down.up = null;
+			origin.down = null;
+		}
+
+		numNodes = 0;
 	}
 
 	//ADD HELPER FUNCTIONS BELOW
