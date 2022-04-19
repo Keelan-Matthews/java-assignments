@@ -39,21 +39,29 @@ public class Main {
 
         //        threaded Avl tree
 
-        ThreadedAvlTree<Integer> threadedAvlTree = new ThreadedAvlTree<>();
-        threadedAvlTree.convertAVLtoThreaded(tree.root);
-
-        System.out.println("Inorder traversal" +
-                " of constructed threaded avl tree is : ");
-        threadedAvlTree.print(threadedAvlTree.root);
-        System.out.println("\nTree Height is: " + threadedAvlTree.getHeight(threadedAvlTree.root));
-
-        threadedAvlTree.root = threadedAvlTree.insert(threadedAvlTree.root, 82);
-        threadedAvlTree.root = threadedAvlTree.insert(threadedAvlTree.root, 82);
-
-        System.out.println("Inorder traversal" +
-                " of constructed threaded avl tree is : ");
-        threadedAvlTree.print(threadedAvlTree.root);
-        System.out.println("\nTree Height is: " + threadedAvlTree.getHeight(threadedAvlTree.root));
+//        ThreadedAvlTree<Integer> threadedAvlTree = new ThreadedAvlTree<>();
+//        threadedAvlTree.convertAVLtoThreaded(tree.root);
+//
+//        System.out.println("Inorder traversal" +
+//                " of constructed threaded avl tree is : ");
+//        threadedAvlTree.print(threadedAvlTree.root);
+//        System.out.println("\nTree Height is: " + threadedAvlTree.getHeight(threadedAvlTree.root));
+//
+//        threadedAvlTree.root = threadedAvlTree.insert(threadedAvlTree.root, 82);
+//        threadedAvlTree.root = threadedAvlTree.insert(threadedAvlTree.root, 91);
+//        threadedAvlTree.root = threadedAvlTree.insert(threadedAvlTree.root, 50);
+//
+//        System.out.println("Inorder traversal" +
+//                " of constructed threaded avl tree is : ");
+//        threadedAvlTree.print(threadedAvlTree.root);
+//        System.out.println("\nTree Height is: " + threadedAvlTree.getHeight(threadedAvlTree.root));
+//
+//        threadedAvlTree.root = threadedAvlTree.removeNode(threadedAvlTree.root, 91);
+//
+//        System.out.println("Inorder traversal" +
+//                " of constructed threaded avl tree is : ");
+//        threadedAvlTree.print(threadedAvlTree.root);
+//        System.out.println("\nTree Height is: " + threadedAvlTree.getHeight(threadedAvlTree.root));
     }
 }
 
@@ -65,17 +73,23 @@ Inorder traversal of constructed tree is :
 Tree Height is: 2
 Inorder traversal of constructed tree is :
 14 20 25 35 65 80
-Tree Height is: 3
+Tree Height is: 2
 Inorder traversal of constructed tree is :
 14 20 25 35 65 80 82
 Tree Height is: 3
 Inorder traversal of constructed tree is :
 14 20 25 35 65 82
-Tree Height is: 3
+Tree Height is: 2
+
 Inorder traversal of constructed threaded avl tree is :
 14 20 25 35 65 82
-Tree Height is: 3
+Tree Height is: 2
 Inorder traversal of constructed threaded avl tree is :
 14 20 25 35 50 65 82 91
-Tree Height is: 4
+Tree Height is: 3
+Inorder traversal of constructed threaded avl tree is :
+14 20 25 35 50 65 82
+Tree Height is: 3
+
+
  */
