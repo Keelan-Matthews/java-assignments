@@ -1,26 +1,19 @@
-//@SuppressWarnings({ "unchecked", "rawtypes" });
 //public class ThreadedAvlTree<T extends Comparable<T>> {
 //    public Node<T> root;
-//
 //    public ThreadedAvlTree() {
 //        this.root = null;
 //    }
-//
-//
 //    int getHeight(Node<T> N) {
 //        if (N == null)
 //            return 0;
 //
 //        return N.height;
 //    }
-//
 //    static Node getLeftMost(Node node) {
 //        while (node != null && node.left != null)
 //            node = node.left;
 //        return node;
 //    }
-//
-//    // Inorder traversal of a threaded avl tree
 //    void print(Node<T> node) {
 //        if (node == null)
 //            return;
@@ -38,28 +31,39 @@
 //        }
 //    }
 //
-//    /* Do not edit the code above */
-//
-//
 //    void convertAVLtoThreaded(Node<T> node) {
-//
+//        root = deepCopy(node);
+//        makeThreaded(root);
 //    }
-//
-//    /**
-//     * Insert the given data into the tree.
-//     * Duplicate data is not allowed. just return the node.
-//     */
-//
 //
 //    Node<T> insert(Node<T> node, T data) {
 //
 //    }
 //
-//    /**
-//     * Delete the given element \texttt{data} from the tree.  Re-balance the tree after deletion.
-//     * If the data is not in the tree, return the given node / root.
-//     */
 //    Node<T> removeNode(Node<T> root, T data) {
 //
+//    }
+//
+//    Node<T> makeThreaded(Node<T> root) {
+//        if (root == null) return null;
+//        if (root.left == null && root.right == null) return root;
+//
+//        if (root.left != null) {
+//            Node<T> pred = makeThreaded(root.left);
+//            pred.right = root;
+//            pred.rightThread = true;
+//        }
+//        if (root.right == null) return root;
+//        return makeThreaded(root.right);
+//    }
+//
+//    Node<T> deepCopy(Node<T> root)
+//    {
+//        if (root == null) return null;
+//
+//        Node<T> newNode = new Node<>(root.data);
+//        newNode.left= deepCopy(root.left);
+//        newNode.right= deepCopy(root.right);
+//        return newNode;
 //    }
 //}

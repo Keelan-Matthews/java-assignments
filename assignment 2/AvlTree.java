@@ -1,19 +1,14 @@
 public class AvlTree<T extends Comparable<T>> {
     public Node<T> root;
-
     public AvlTree() {
         this.root = null;
     }
-
-
     int getHeight(Node<T> N) {
         if (N == null)
             return 0;
 
         return N.height;
     }
-
-    /*Printing AvlTree in inorder*/
     void print(Node<T> node) {
         if (node == null)
             return;
@@ -25,13 +20,6 @@ public class AvlTree<T extends Comparable<T>> {
         print(node.right);
     }
 
-    /* Do not edit the code above */
-
-    /**
-     * Insert the given data into the tree.
-     * Duplicate data is not allowed. just return the node.
-     */
-
     Node<T> insert(Node<T> node, T data) {
         if (node == null) return new Node<>(data);
 
@@ -42,29 +30,9 @@ public class AvlTree<T extends Comparable<T>> {
         else
             return node;
 
-        update(node);
-        int bF = bF(node);
-
-        if (bF > 1 && data.compareTo(node.left.data) < 0) return right(node);
-        if (bF < -1 && data.compareTo(node.right.data) > 0) return left(node);
-
-        if (bF > 1 && data.compareTo(node.left.data) > 0 ) {
-            node.left = left(node.left);
-            return right(node);
-        }
-        if (bF < -1 && data.compareTo(node.right.data) < 0 ) {
-            node.right = right(node.right);
-            return left(node);
-        }
-
-        return node;
+        setHeights(node);
+        return balance(node);
     }
-
-
-    /**
-     * Remove / Delete the node based on the given data
-     * Return the node / root if the data do not exist
-     */
 
     Node<T> removeNode(Node<T> root, T data) {
         if (root == null) return null;
@@ -74,101 +42,84 @@ public class AvlTree<T extends Comparable<T>> {
         else if (data.compareTo(root.data) > 0)
             root.right = removeNode(root.right, data);
         else {
-            if (root.left == null || root.right == null) {
-                Node<T> var = null;
-                if (var == root.left)
-                    var = root.right;
-                else
-                    var = root.left;
+            //One or no children
+            if (root.left == null) return root.right;
+            else if (root.right == null) return root.left;
 
-                if (var == null) {
-                    var = root;
-                    root = null;
-                }
-                else
-                    root = var;
-            }
-            else {
-                Node<T> curr = root.right;
-                while (curr.left != null)
-                    curr = curr.left;
-
-                root.data = curr.data;
-                root.right = removeNode(root.right, curr.data);
-            }
+            //Two children
+            root.data = getMax(root.left);
+            root.left = removeNode(root.left,root.data);
         }
 
-        if (root == null) return null;
-
-        update(root);
-        int bF = bF(root);
-
-        if (bF > 1 && bF(root.left) >= 0) return right(root);
-        if (bF < -1 && bF(root.right) <= 0) return left(root);
-
-        if (bF > 1 && bF(root.left) < 0) {
-            root.left = left(root.left);
-            return right(root);
-        }
-
-        if (bF < -1 && bF(root.right) > 0) {
-            root.right = right(root.right);
-            return left(root);
-        }
-
-        return root;
+        setHeights(root);
+        return balance(root);
     }
 
     int max(int x, int y) {
         return (x > y) ? x : y;
     }
 
+    T getMax(Node<T> node) {
+        return (node.right != null) ? getMax(node.right) : node.data;
+    }
+
     Node<T> left(Node<T> node) {
-        Node<T> rightNode = node.right;
-        Node<T> leftNode = rightNode.left;
+        Node<T> rightChild = node.right;
+        Node<T> centerChild = rightChild.left;
 
-        rightNode.left = node;
-        node.right = leftNode;
+        rightChild.left = node;
+        node.right = centerChild;
 
-        update(node);
-        update(rightNode);
+        setHeights(node);
+        setHeights(rightChild);
 
-        return rightNode;
+        return rightChild;
     }
 
     Node<T> right(Node<T> node) {
-        Node<T> leftNode = node.left;
-        Node<T> rightNode = leftNode.right;
+        Node<T> leftChild = node.left;
+        Node<T> centerChild = leftChild.right;
 
-        leftNode.right = node;
-        node.left = rightNode;
+        leftChild.right = node;
+        node.left = centerChild;
 
-        update(node);
-        update(leftNode);
+        setHeights(node);
+        setHeights(leftChild);
 
-        return leftNode;
+        return leftChild;
     }
 
     int bF(Node<T> node) {
-        if (node == null) return 0;
-        return getHeight(node.left) - getHeight(node.right);
+        return (node == null) ? 0 : (getBalanceHeight(node.left) - getBalanceHeight(node.right));
     }
 
-    int update(Node<T> node) {
-        int leftHeight = 0;
-        int rightHeight = 0;
+    int getBalanceHeight(Node<T> node) {
+        return (node == null) ? 0 : node.height + 1;
+    }
 
-        if (node == null) return 0;
+    int setHeights(Node<T> node) {
+        if (node == null || (node.left == null && node.right == null)) return 0;
 
-        if (node.left == null && node.right == null) {
-            node.height = 0;
-            return node.height;
-        }
-
-        if (node.right != null) rightHeight = 1 + update(node.right);
-        if (node.left != null) leftHeight = 1 + update(node.left);
-
-        node.height = max(leftHeight, rightHeight);
+        int maxHeight = max(setHeights(node.left), setHeights(node.right));
+        node.height = maxHeight +1;
         return node.height;
+    }
+
+    Node<T> balance(Node<T> node) {
+        int bF = bF(node);
+
+        if (bF > 1) {
+            if (bF(node.left) < 0)
+                node.left = left(node.left);
+
+            return right(node);
+        }
+        if (bF < -1) {
+            if (bF(node.right) > 0)
+                node.right = right(node.right);
+
+            return left(node);
+        }
+        return node;
     }
 }
