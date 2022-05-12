@@ -1,3 +1,4 @@
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AvlTree<T extends Comparable<T>> {
     public Node<T> root;
     public AvlTree() {
@@ -30,7 +31,7 @@ public class AvlTree<T extends Comparable<T>> {
         else
             return node;
 
-        setHeights(node);
+        node.height = setHeights(node);
         return balance(node);
     }
 
@@ -51,7 +52,7 @@ public class AvlTree<T extends Comparable<T>> {
             root.left = removeNode(root.left,root.data);
         }
 
-        setHeights(root);
+        root.height = setHeights(root);
         return balance(root);
     }
 
@@ -70,8 +71,8 @@ public class AvlTree<T extends Comparable<T>> {
         rightChild.left = node;
         node.right = centerChild;
 
-        setHeights(node);
-        setHeights(rightChild);
+        node.height = setHeights(node);
+        rightChild.height = setHeights(rightChild);
 
         return rightChild;
     }
@@ -83,8 +84,8 @@ public class AvlTree<T extends Comparable<T>> {
         leftChild.right = node;
         node.left = centerChild;
 
-        setHeights(node);
-        setHeights(leftChild);
+        node.height = setHeights(node);
+        leftChild.height = setHeights(leftChild);
 
         return leftChild;
     }
@@ -101,7 +102,7 @@ public class AvlTree<T extends Comparable<T>> {
         if (node == null || (node.left == null && node.right == null)) return 0;
 
         int maxHeight = max(setHeights(node.left), setHeights(node.right));
-        node.height = maxHeight +1;
+        node.height = maxHeight + 1;
         return node.height;
     }
 
