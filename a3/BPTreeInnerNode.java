@@ -35,5 +35,25 @@ class BPTreeInnerNode<TKey extends Comparable<TKey>, TValue> extends BPTreeNode<
 	////// You should not change any code above this line //////
 
 	////// Implement functions below this line //////
+	public int addKey(TKey key) {
+		for (int i = 0; i < getKeyCount(); i++) {
+			if (getKey(i).compareTo(key) > 0) {
+				for (int j = getKeyCount(); j > i; j--) {
+					setKey(j, getKey(j - 1));
+					setChild(j, getChild(j - 1));
+				}
 
+				setKey(i, key);
+				keyTally++;
+				return i;
+			}
+
+			if (i+1 == getKeyCount()) {
+				setKey(i+1, key);
+				keyTally++;
+				return i;
+			}
+		}
+		return 0;
+	}
 }

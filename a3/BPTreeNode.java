@@ -102,29 +102,16 @@ abstract class BPTreeNode<TKey extends Comparable<TKey>, TValue> {
 	 */
 	public TValue search(TKey key) 
 	{
-		// Your code goes here
+
 	}
 
-
-
-	/**
-	 * Insert a new key and its associated value into the B+ tree. The root node of the
-	 * changed tree should be returned.
-	 */
 	public BPTreeNode<TKey, TValue> insert(TKey key, TValue value) 
 	{
-		// Your code goes here
+		return this;
 	}
-
-
-
-	/**
-	 * Delete a key and its associated value from the B+ tree. The root node of the
-	 * changed tree should be returned.
-	 */
 	public BPTreeNode<TKey, TValue> delete(TKey key) 
 	{
-		// Your code goes here
+		return this;
 	}
 
 
@@ -138,5 +125,6 @@ abstract class BPTreeNode<TKey extends Comparable<TKey>, TValue> {
 	{
 		// Your code goes here
 	}
+
 
 }
