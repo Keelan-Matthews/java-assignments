@@ -35,6 +35,16 @@ class BPTreeInnerNode<TKey extends Comparable<TKey>, TValue> extends BPTreeNode<
 	////// You should not change any code above this line //////
 
 	////// Implement functions below this line //////
+	public BPTreeNode<TKey, TValue> insert(TKey key, TValue value) {
+		BPTreeNode<TKey, TValue> leaf = this.findLeaf(this, key);
+		if (leaf.getKeyCount() < m) {
+			keyTally++;
+			return leaf.insert(key, value);
+		}
+		else {
+			return split(this);
+		}
+	}
 	public int addKey(TKey key) {
 		for (int i = 0; i < getKeyCount(); i++) {
 			if (getKey(i).compareTo(key) > 0) {
@@ -55,5 +65,59 @@ class BPTreeInnerNode<TKey extends Comparable<TKey>, TValue> extends BPTreeNode<
 			}
 		}
 		return 0;
+	}
+
+	public BPTreeNode<TKey, TValue> findLeaf(BPTreeNode<TKey, TValue> node, TKey key) {
+		int i = 0;
+		while (i < this.keyTally && key.compareTo((TKey) this.keys[i]) > 0)
+			i++;
+
+		if (node.isLeaf()) return node;
+
+		BPTreeInnerNode<TKey, TValue> inner = (BPTreeInnerNode<TKey, TValue>)node;
+		return ((BPTreeInnerNode<TKey, TValue>)inner.getChild(i)).findLeaf(inner.getChild(i), key);
+	}
+
+	private BPTreeInnerNode<TKey, TValue> split(BPTreeInnerNode<TKey, TValue> node) {
+		BPTreeInnerNode<TKey, TValue> parent = new BPTreeInnerNode<>(node.m);
+		int median = node.getKeyCount()/2;
+		int pos = 0;
+
+		if (node.parentNode == null) {
+			parent.setKey(0, node.getKey(median));
+			parent.keyTally++;
+		}
+		else {
+			BPTreeInnerNode<TKey, TValue> currParent = (BPTreeInnerNode<TKey, TValue>)node.parentNode;
+			pos = currParent.addKey(node.getKey(median));
+			parent = currParent;
+		}
+
+		BPTreeInnerNode<TKey, TValue> left = new BPTreeInnerNode<>(node.m);
+		for (int i = 0; i < median; i++) {
+			left.setPair(i, node.getKey(i), node.getChild(i));
+			left.keyTally++;
+		}
+
+		BPTreeInnerNode<TKey, TValue> right = new BPTreeInnerNode<>(node.m);
+		for (int i = median; i < getKeyCount(); i++) {
+			right.setPair(right.getKeyCount(), node.getKey(i), node.getChild(i));
+			right.keyTally++;
+		}
+
+		if (node.parentNode == null) {
+			parent.setChild(0, left);
+			parent.setChild(1, right);
+		}
+		else {
+			parent.setChild(pos, left);
+			parent.setChild(pos+1, right);
+		}
+		return parent;
+	}
+
+	private void setPair(int i, TKey key, BPTreeNode<TKey, TValue> child) {
+		this.setKey(i,key);
+		this.setChild(i, child);
 	}
 }

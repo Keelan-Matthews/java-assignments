@@ -102,7 +102,7 @@ abstract class BPTreeNode<TKey extends Comparable<TKey>, TValue> {
 	 */
 	public TValue search(TKey key) 
 	{
-
+		return search(this, key);
 	}
 
 	public BPTreeNode<TKey, TValue> insert(TKey key, TValue value) 
@@ -114,17 +114,28 @@ abstract class BPTreeNode<TKey extends Comparable<TKey>, TValue> {
 		return this;
 	}
 
-
-
 	/**
 	 * Return all associated key values on the B+ tree in ascending key order using the sequence set. An array
 	 * of the key values should be returned.
 	 */
-	@SuppressWarnings("unchecked")
-	public TValue[] values() 
-	{
-		// Your code goes here
+//	@SuppressWarnings("unchecked")
+//	public TValue[] values()
+//	{
+//		// Your code goes here
+//	}
+
+	public TValue search(BPTreeNode<TKey, TValue> node, TKey key) {
+		int i = 0;
+		while (i < this.keyTally && key.compareTo((TKey) this.keys[i]) > 0)
+			i++;
+
+		if (node.isLeaf()) {
+			BPTreeLeafNode<TKey, TValue> leaf = (BPTreeLeafNode<TKey, TValue>)node;
+			return (leaf.keys[i] == key) ? leaf.getValue(i) : null;
+		}
+		else {
+			BPTreeInnerNode<TKey, TValue> inner = (BPTreeInnerNode<TKey, TValue>)node;
+			return ((BPTreeNode<TKey, TValue>) inner.references[i]).search((BPTreeNode<TKey, TValue>) inner.references[0], key);
+		}
 	}
-
-
 }

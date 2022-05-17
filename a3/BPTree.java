@@ -82,14 +82,14 @@ public class BPTree<TKey extends Comparable<TKey>, TValue> {
 	/**
 	 * Return all associated key values on the B+ tree in ascending key order.
 	 */
-	public TValue[] values() {
-		if (root != null) 
-		{ 
-			return root.values();
-		}
-		else {
-			return null;
-		}
-	}	
+//	public TValue[] values() {
+//		if (root != null)
+//		{
+//			return root.values();
+//		}
+//		else {
+//			return null;
+//		}
+//	}
 
 }
