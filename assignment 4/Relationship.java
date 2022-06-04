@@ -12,6 +12,9 @@ public class Relationship {
     } 
 
     public Relationship(User friendA, User friendB, double friendshipValue){
+        this.friendA = friendA;
+        this.friendB = friendB;
+        this.friendshipValue = friendshipValue;
     }
 
     public boolean equals(Relationship relationship){

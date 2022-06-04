@@ -11,7 +11,8 @@ public class User {
     }
     
     public User(String userName, int userID){
-        
+        this.userName = userName;
+        this.userID = userID;
     }
 
     public Relationship[] getFriends(){
@@ -19,7 +20,7 @@ public class User {
     }
 
     public Relationship addFriend(User friend, double friendshipValue){
-    
+        if (friend == null) return null;
     }
 
     public void addFriend(Relationship relationship){
