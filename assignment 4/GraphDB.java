@@ -155,7 +155,7 @@ public class GraphDB {
 
     //This algorithm uses Prim's algorithm
     public Relationship[] minSpanningTree(){
-        Relationship[] mst = new Relationship[users.size()];
+        ArrayList<Relationship> mst = new ArrayList<>();
         int e = 0; //index variable for result
         int i = 0; //index variable for sorted edges
 
@@ -166,12 +166,12 @@ public class GraphDB {
         Relationship[] sorted = edgeSort();
 
         subset[] subsets = new subset[users.size()];
-        for (i = 0; i < users.size(); ++i)
-            subsets[i] = new subset();
+        for (int s = 0; s < users.size(); ++s)
+            subsets[s] = new subset();
 
         for (int v = 0; v < users.size(); ++v)
         {
-            subsets[v].parent = v;
+            subsets[v].parent = users.get(v).userID;
             subsets[v].rank = 0;
         }
 
@@ -183,12 +183,13 @@ public class GraphDB {
             int y = find(subsets, edge.friendB.userID);
 
             if (x != y) {
-                sorted[e++] = edge;
+                mst.add(edge);
+                e++;
                 union(subsets, x, y);
             }
         }
 
-        return sorted;
+        return mst.toArray(new Relationship[0]);
     }
 
 //    public User[] getUsersAtDistance(User fromUser, int distance){
