@@ -192,9 +192,13 @@ public class GraphDB {
         return mst.toArray(new Relationship[0]);
     }
 
-//    public User[] getUsersAtDistance(User fromUser, int distance){
-//
-//    }
+    ArrayList<User> userDistance = new ArrayList<>();
+    public User[] getUsersAtDistance(User fromUser, int distance){
+        if (distance == 0) return new User[]{fromUser};
+
+        traverse(fromUser, null, distance);
+        return userDistance.toArray(new User[0]);
+    }
 
     /* This function finds the colour out of all the vertices that is
     * the most common. This number will be the highest and will be suitable
@@ -298,5 +302,18 @@ public class GraphDB {
                 }
 
         return sorted;
+    }
+
+    private void traverse(User u, User parent, int distance) {
+        if (distance == 0) {
+            for (User p : userDistance)
+                if (p == u) return;
+            userDistance.add(u);
+        }
+        else {
+            for (Relationship r : u.getFriends())
+                if (r.friendB != parent)
+                    traverse(r.friendB, u, distance-1);
+        }
     }
 }

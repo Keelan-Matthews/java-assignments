@@ -43,10 +43,10 @@ public class Main {
             System.out.println(temp);
         }
 
-//        Object[] userArr = sort(graphDB.getUsersAtDistance(graphDB.getUser("A"), 2));
-//        for(Object user: userArr){
-//            System.out.println((User)user);
-//        }
+        Object[] userArr = sort(graphDB.getUsersAtDistance(graphDB.getUser("A"), 2));
+        for(Object user: userArr){
+            System.out.println((User)user);
+        }
 
         coloring();
     }
