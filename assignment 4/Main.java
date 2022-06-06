@@ -43,10 +43,10 @@ public class Main {
             System.out.println(temp);
         }
 
-        Object[] userArr = sort(graphDB.getUsersAtDistance(graphDB.getUser("A"), 2));
-        for(Object user: userArr){
-            System.out.println((User)user);
-        }
+//        Object[] userArr = sort(graphDB.getUsersAtDistance(graphDB.getUser("A"), 2));
+//        for(Object user: userArr){
+//            System.out.println((User)user);
+//        }
 
         coloring();
     }
@@ -115,18 +115,18 @@ class Tuple<T,U,S>{
 
 /*
 Expected Output:
-A[0]-(2.0)->B[1]
-B[1]-(6.0)->E[4]
-B[1]-(9.0)->F[5]
-C[2]-(3.0)->G[6]
 D[3]-(8.0)->E[4]
+A[0]-(2.0)->B[1]
 F[5]-(1.0)->G[6]
+B[1]-(6.0)->E[4]
+C[2]-(3.0)->G[6]
+B[1]-(9.0)->F[5]
 A[0];F[5];
 B[1];C[2];D[3];
 E[4];G[6];
-E[4]
-F[5]
 G[6]
+F[5]
+E[4]
 b[1];g[6];
 c[2];e[4];f[5];
 a[0];d[3];h[7];

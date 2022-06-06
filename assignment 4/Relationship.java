@@ -29,4 +29,9 @@ public class Relationship {
             return true;
         return false;
     }
+
+    public double compareTo(Relationship edge)
+    {
+        return this.friendshipValue - edge.friendshipValue;
+    }
 }

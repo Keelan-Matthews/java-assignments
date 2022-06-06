@@ -4,6 +4,10 @@ public class User {
     String userName;
     int userID;
     ArrayList<Relationship> friends = new ArrayList<>();
+    int colour = -1;
+    int saturationDeg = 0;
+    int uncolouredDeg = 0;
+    boolean processed = false;
 
     @Override
     public String toString() {
@@ -23,19 +27,24 @@ public class User {
         if (friend == null) return null;
 
         //Create new relationship
-        Relationship newRelationship = new Relationship(this, friend, friendshipValue);
+        Relationship newRelationshipA = new Relationship(this, friend, friendshipValue);
+        Relationship newRelationshipB = new Relationship(friend, this, friendshipValue);
 
         //Test if relationship exists
         Relationship curr[] = this.getFriends();
 
         for (Relationship relationship : curr)
-            if (relationship.equals(newRelationship)) return relationship;
+            if (relationship.equals(newRelationshipA)) return relationship;
 
         //Add relationship to both users
-        this.addFriend(newRelationship);
-        friend.addFriend(newRelationship);
+        this.addFriend(newRelationshipA);
+        friend.addFriend(newRelationshipB);
 
-        return newRelationship;
+        //Increase degree
+        this.uncolouredDeg++;
+        friend.uncolouredDeg++;
+
+        return newRelationshipA;
     }
 
     public void addFriend(Relationship relationship){
