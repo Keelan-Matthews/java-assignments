@@ -56,8 +56,11 @@ public class GraphDB {
 
     public User[][] clusterUsers(){
         //RESET USER SATURATION AND DEGREE BEFORE STARTING
-
-
+        for (User u : users) {
+            u.processed = false;
+            u.saturationDeg = 0;
+            u.uncolouredDeg = u.friends.size();
+        }
 
         int[] colours = {0,1,2,3,4,5,6,7,8};
         User v = null;
@@ -175,7 +178,7 @@ public class GraphDB {
 
         for (int v = 0; v < users.size(); ++v)
         {
-            subsets[v].parent = users.get(v).userID;
+            subsets[v].parent = users.get(v).index;
             subsets[v].rank = 0;
         }
 
@@ -200,7 +203,10 @@ public class GraphDB {
     public User[] getUsersAtDistance(User fromUser, int distance){
         if (distance == 0) return new User[]{fromUser};
 
-        traverse(fromUser, null, distance);
+        for (User u : users)
+            u.processed = false;
+
+        traverse(fromUser, distance);
         return userDistance.toArray(new User[0]);
     }
 
@@ -219,13 +225,6 @@ public class GraphDB {
 
         return colourCount;
     }
-
-//    Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index -66 out of bounds for length 3715
-//    at GraphDB.countingSort(GraphDB.java:234)
-//    at GraphDB.clusterUsers(GraphDB.java:148)
-//    Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 501 out of bounds for length 2
-//    at GraphDB.find(GraphDB.java:254)
-//    at GraphDB.minSpanningTree(GraphDB.java:184)
     public User[] countingSort(ArrayList<User> u)
     {
         int length = u.size();
@@ -251,12 +250,10 @@ public class GraphDB {
 
         return sorted;
     }
-
     static class subset
     {
         int parent, rank;
     }
-
     private int find(subset[] subsets, int i)
     {
         if (subsets[i].parent != i)
@@ -264,7 +261,6 @@ public class GraphDB {
 
         return subsets[i].parent;
     }
-
     private void union(subset[] subsets, int x, int y)
     {
         int xNode = find(subsets, x);
@@ -279,7 +275,6 @@ public class GraphDB {
             subsets[xNode].rank++;
         }
     }
-
     private Relationship[] edgeSort() {
         ArrayList<Relationship> unsorted = new ArrayList<>();
 
@@ -313,8 +308,8 @@ public class GraphDB {
 
         return sorted;
     }
-
-    private void traverse(User u, User parent, int distance) {
+    private void traverse(User u, int distance) {
+        u.processed = true;
         if (distance == 0) {
             for (User p : userDistance)
                 if (p == u) return;
@@ -322,8 +317,8 @@ public class GraphDB {
         }
         else {
             for (Relationship r : u.getFriends())
-                if (r.friendB != parent)
-                    traverse(r.friendB, u, distance-1);
+                if (!r.friendB.processed)
+                    traverse(r.friendB, distance-1);
         }
     }
 }
