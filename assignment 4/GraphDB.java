@@ -150,7 +150,7 @@ public class GraphDB {
             cluster[i] = new User[rowSizes[i]];
 
         //Sort users by ID
-        User[] sorted = countingSort(users);
+        User[] sorted = insertSort();
 
         //Populate array cluster
         for (User u : sorted) {
@@ -225,27 +225,30 @@ public class GraphDB {
 
         return colourCount;
     }
-    public User[] countingSort(ArrayList<User> u)
+    public User[] insertSort()
     {
-        int length = u.size();
-        User[] sorted = new User[length+1];
+        //Get user IDs
+        int[] id = new int[users.size()];
+        for (int i = 0; i < id.length; i++)
+            if (users.get(i) != null)
+                id[i] = users.get(i).userID;
 
-        int max = u.get(0).index;
-        for (int i = 1; i < length; i++)
-            if (u.get(i).index > max)
-                max = u.get(i).index;
+        int k = 0;
+        int temp;
 
-        int[] count = new int[max+1];
-        for (int i = 0; i < max; ++i) count[i] = 0;
+        for(int i = 1; i < id.length; i++){
+            temp = id[i];
+            k = i -1;
+            while(k >= 0 && temp < id[k]){
+                id[k+1] = id[k];
+                k--;
+            }
+            id[k+1] = temp;
+        }
 
-        for (User datum : u) count[datum.index]++;
-
-        for (int i = 1; i <= max; i++)
-            count[i] += count[i-1];
-
-        for (int i = length-1; i >= 0; i--) {
-            sorted[count[u.get(i).index] - 1] = u.get(i);
-            count[u.get(i).index]--;
+        User[] sorted = new User[id.length];
+        for(int i = 0; i < sorted.length; i++){
+            sorted[i] = users.get(getUserIndex(id[i]));
         }
 
         return sorted;
@@ -320,5 +323,16 @@ public class GraphDB {
                 if (!r.friendB.processed)
                     traverse(r.friendB, distance-1);
         }
+    }
+
+    private int getUserIndex(int id) {
+        int i = 0;
+        for (User u : users) {
+            if (u.userID != id)
+                i++;
+            else
+                return i;
+        }
+        return i;
     }
 }
