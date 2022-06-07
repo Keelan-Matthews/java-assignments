@@ -2,12 +2,14 @@ import java.util.ArrayList;
 
 public class GraphDB {
     private ArrayList<User> users = new ArrayList<>();
+    private int vIndex = 0;
 
     public User addUser(String userName, int ID){
         //Test if user ID exists
         if (this.getUser(ID) != null) return this.getUser(ID);
         //Create new user
-        User newUser = new User(userName, ID);
+        User newUser = new User(userName, ID, vIndex);
+        vIndex++;
         //Add user to graph
         users.add(newUser);
         return newUser;
@@ -53,6 +55,10 @@ public class GraphDB {
     }
 
     public User[][] clusterUsers(){
+        //RESET USER SATURATION AND DEGREE BEFORE STARTING
+
+
+
         int[] colours = {0,1,2,3,4,5,6,7,8};
         User v = null;
         int highestColour = 0; //This will be the column count of the 2D array
@@ -88,7 +94,7 @@ public class GraphDB {
             for (Relationship friend : friends)
                 seenColours.add(friend.friendB.colour); //get colours around v
 
-            //Find highest colour
+            //Find the highest colour
             boolean done = false;
 
             while (!done) {
@@ -116,9 +122,11 @@ public class GraphDB {
                 Relationship[] adjFriends = friend.friendB.getFriends();
 
                 //Visit vertices adjacent to friend B other than currently processed and see if they have colour[j]
-                for (int k = 0; k < adjFriends.length; k++)
-                    if (adjFriends[k].friendB != v && adjFriends[k].friendB.colour == colours[j])
+                for (Relationship adjFriend : adjFriends)
+                    if (adjFriend.friendB != v && adjFriend.friendB.colour == colours[j]) {
                         update = false;
+                        break;
+                    }
 
                 //If not, update saturation degree
                 if (update) friendB.saturationDeg++;
@@ -139,7 +147,7 @@ public class GraphDB {
             cluster[i] = new User[rowSizes[i]];
 
         //Sort users by ID
-        User[] sorted = countingsort(users);
+        User[] sorted = countingSort(users);
 
         //Populate array cluster
         for (User u : sorted) {
@@ -153,14 +161,10 @@ public class GraphDB {
         return cluster;
     }
 
-    //This algorithm uses Prim's algorithm
     public Relationship[] minSpanningTree(){
         ArrayList<Relationship> mst = new ArrayList<>();
         int e = 0; //index variable for result
         int i = 0; //index variable for sorted edges
-
-        for (Relationship u : mst)
-            u = null;
 
         //Sort edges
         Relationship[] sorted = edgeSort();
@@ -179,8 +183,8 @@ public class GraphDB {
             //Find smallest edge
             Relationship edge = sorted[i++];
 
-            int x = find(subsets, edge.friendA.userID);
-            int y = find(subsets, edge.friendB.userID);
+            int x = find(subsets, edge.friendA.index);
+            int y = find(subsets, edge.friendB.index);
 
             if (x != y) {
                 mst.add(edge);
@@ -216,33 +220,39 @@ public class GraphDB {
         return colourCount;
     }
 
-    public User[] countingsort(ArrayList<User> u)
+//    Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index -66 out of bounds for length 3715
+//    at GraphDB.countingSort(GraphDB.java:234)
+//    at GraphDB.clusterUsers(GraphDB.java:148)
+//    Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 501 out of bounds for length 2
+//    at GraphDB.find(GraphDB.java:254)
+//    at GraphDB.minSpanningTree(GraphDB.java:184)
+    public User[] countingSort(ArrayList<User> u)
     {
         int length = u.size();
         User[] sorted = new User[length+1];
 
-        int max = u.get(0).userID;
+        int max = u.get(0).index;
         for (int i = 1; i < length; i++)
-            if (u.get(i).userID > max)
-                max = u.get(i).userID;
+            if (u.get(i).index > max)
+                max = u.get(i).index;
 
         int[] count = new int[max+1];
         for (int i = 0; i < max; ++i) count[i] = 0;
 
-        for (User datum : u) count[datum.userID]++;
+        for (User datum : u) count[datum.index]++;
 
         for (int i = 1; i <= max; i++)
             count[i] += count[i-1];
 
         for (int i = length-1; i >= 0; i--) {
-            sorted[count[u.get(i).userID] - 1] = u.get(i);
-            count[u.get(i).userID]--;
+            sorted[count[u.get(i).index] - 1] = u.get(i);
+            count[u.get(i).index]--;
         }
 
         return sorted;
     }
 
-    class subset
+    static class subset
     {
         int parent, rank;
     }
@@ -277,16 +287,16 @@ public class GraphDB {
         for (User u : users) {
             Relationship[] curr = u.getFriends();
 
-            for (int i = 0; i < curr.length; i++) {
+            for (Relationship relationship : curr) {
                 boolean add = true;
                 //Check if exists
                 for (Relationship r : unsorted)
-                    if (r.equals(curr[i])) {
+                    if (r.equals(relationship)) {
                         add = false;
                         break;
                     }
 
-                if (add) unsorted.add(curr[i]);
+                if (add) unsorted.add(relationship);
             }
         }
 

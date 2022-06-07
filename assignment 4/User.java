@@ -5,6 +5,7 @@ public class User {
     int userID;
     ArrayList<Relationship> friends = new ArrayList<>();
     int colour = -1;
+    int index;
     int saturationDeg = 0;
     int uncolouredDeg = 0;
     boolean processed = false;
@@ -14,9 +15,10 @@ public class User {
         return userName + "[" + userID + "]";
     }
     
-    public User(String userName, int userID){
+    public User(String userName, int userID, int i){
         this.userName = userName;
         this.userID = userID;
+        this.index = i;
     }
 
     public Relationship[] getFriends(){
